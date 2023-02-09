@@ -2,10 +2,21 @@ import React from 'react';
 import { useState } from 'react';
 import { Post } from '../Post/Post';
 import { PostForm } from '../PostForm/PostForm';
-import { posts as postsData } from './resources/mock-data';
+import { getPosts } from '../../services/posts';
+// import { posts as postsData } from './resources/mock-data';
 
 export const Posts = () => {
-  const [postsStatus, setPostsStatus] = useState(postsData)
+  const [postsStatus, setPostsStatus] = useState([])
+  const [componentStatus, setComponentStatus] = useState('loading')
+
+  React.useEffect(() => {
+    getPosts().then((posts) => {
+      setPostsStatus(posts);
+      setComponentStatus('success');
+    }).catch(() => {
+      setComponentStatus('error');
+    })
+  }, [])
 
   const addNewPost = (e, userId, title, body) => {
     e.preventDefault();
@@ -18,57 +29,27 @@ export const Posts = () => {
     setPostsStatus(postsStatus.concat(newPost));
   };
 
+  const renderPosts = () => {
+    return <div>{!postsStatus || postsStatus.length === 0 ? (
+      <p>No posts</p>
+    ) : (
+      <ol>
+        {postsStatus.map((post) => (
+          <Post key={post.id} id={post.id} userId={post.userId} title={post.title} body={post.body} />
+        ))}
+      </ol>
+    )
+    }</div>
+  }
+
   return (
     <div>
       <h1>Posts</h1>
-      {!postsStatus || postsStatus.length === 0 ? (
-        <p>No posts</p>
-      ) : (
-        <div>
-          {postsStatus.map((post) => (
-            <Post key={post.id} id={post.id} userId={post.userId} title={post.title} body={post.body} />
-          ))}
-        </div>
-      )}
+      {componentStatus === 'loading' && <p>Loading...</p>}
+      {componentStatus === 'error' && <p>ServerError</p>}
+      {componentStatus === 'success' && renderPosts()}
       <br />
       <PostForm onNewPost={addNewPost} />
     </div>
   )
 }
-
-  // const addNewNote = (e, title, content, date, important) => {
-  //   e.preventDefault();
-  //   const newNote = {
-  //     id: notesData.length + 1,
-  //     title,
-  //     content,
-  //     date,
-  //     important,
-  //   };
-  //   notesData.concat(newNote);
-  // };
-
-//       return (
-//       // <div>
-//       {!notes || notes.length === 0 ? (
-//         <p>No data</p>
-//       ) : (
-//         <div>
-//           {notes.map((note) => (
-//             <Note
-//               key={note.id}
-//               id={note.id}
-//               title={note.title}
-//               content={note.content}
-//               date={note.date}
-//               important={note.important}
-//             />
-//           ))}
-//         </div>
-//       )
-//   }
-//   {/* <NoteForm onNewNote={addNewNote} />
-//       </div> */}
-//     )
-// }
-
