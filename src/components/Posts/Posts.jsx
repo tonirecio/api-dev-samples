@@ -2,7 +2,8 @@ import React from 'react';
 import { useState } from 'react';
 import { Post } from '../Post/Post';
 import { PostForm } from '../PostForm/PostForm';
-import { getPosts } from '../../services/posts';
+import { create as createPost, getAll as getAllPosts } from '../../services/posts';
+
 // import { posts as postsData } from './resources/mock-data';
 
 export const Posts = () => {
@@ -10,7 +11,7 @@ export const Posts = () => {
   const [componentStatus, setComponentStatus] = useState('loading')
 
   React.useEffect(() => {
-    getPosts().then((posts) => {
+    getAllPosts().then((posts) => {
       setPostsStatus(posts);
       setComponentStatus('success');
     }).catch(() => {
@@ -26,7 +27,11 @@ export const Posts = () => {
       title,
       body,
     };
-    setPostsStatus(postsStatus.concat(newPost));
+    createPost(newPost).then((data) => {
+      setPostsStatus(postsStatus.concat(newPost));
+    }).catch((error) => {
+      console.error(error);
+    });
   };
 
   const renderPosts = () => {

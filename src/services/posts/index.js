@@ -1,4 +1,4 @@
-export function getPosts() {
+export function getAll() {
   return new Promise(async (resolve, reject) => {
     setTimeout(async () => {
       try {
@@ -13,4 +13,16 @@ export function getPosts() {
       }
     }, 2000);
   });
+}
+
+export async function create(post) {
+  const response = await fetch("https://jsonplaceholder.typicode.com/posts", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(post)
+  });
+
+  return response.json();
 }
