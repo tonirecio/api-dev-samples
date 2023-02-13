@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState } from 'react';
-import { Post } from '../Post/Post';
-import { PostForm } from '../PostForm/PostForm';
+import { Post } from '../Post';
+import { PostForm } from '../PostForm';
 import { create as createPost, getAll as getAllPosts } from '../../services/posts';
 
 // import { posts as postsData } from './resources/mock-data';
