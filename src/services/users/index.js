@@ -1,5 +1,5 @@
 
-export const get = (id) => async () => {
+export const get = async (id) => {
   const response = await fetch(`https://reqres.in/api/users/${id}`);
   if (!response.ok) {
     throw new Error({
@@ -19,7 +19,7 @@ export const get = (id) => async () => {
   // }
 };
 
-export const getWithPause = (id) => async () => {
+export const getWithPause = async (id) => {
   return new Promise(async (resolve, reject) => {
     setTimeout(async () => {
       try {

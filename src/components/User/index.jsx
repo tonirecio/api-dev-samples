@@ -1,7 +1,7 @@
 import { useFetchData } from '../../hooks/useFetchData';
 import { getWithPause as getUser } from '../../services/users';
-// import { Error } from '../Error';
-// import { Loader } from '../Loader';
+import { Error } from '../Error';
+import { Loader } from '../Loader';
 
 export const User = () => {
 
@@ -11,14 +11,12 @@ export const User = () => {
   });
 
   if (!isLoaded) {
-    return <div>Cargando datos...</div>;
+    return <Loader />
   }
 
   if (isError) {
-    return <div>Ha ocurrido un error: {isError.message}</div>;
+    return <Error />;
   }
-
-  console.log('data', data);
 
   return (
     <div>

@@ -9,7 +9,7 @@ export const useFetchData = ({ key, action }) => {
   useEffect(() => {
     const loadData = async () => {
       try {
-        const actionData = await action();
+        const actionData = await (action);
         setData(actionData);
         setIsLoaded(true);
       } catch (error) {
@@ -18,7 +18,7 @@ export const useFetchData = ({ key, action }) => {
       }
     }
     loadData();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [key]);
 
   return [data, isLoaded, isError];
