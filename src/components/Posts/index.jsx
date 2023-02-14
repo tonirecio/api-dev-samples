@@ -1,45 +1,41 @@
 import React from 'react';
-import { useState } from 'react';
 import { Post } from '../Post';
 import { PostForm } from '../PostForm';
 import { create as createPost, getAll as getAllPosts } from '../../services/posts';
+import { useFetchData } from '../../hooks/useFetchData';
+import { Error } from '../Error';
+import { Loader } from '../Loader';
 
 // import { posts as postsData } from './resources/mock-data';
 
 export const Posts = () => {
-  const [postsStatus, setPostsStatus] = useState([])
-  const [componentStatus, setComponentStatus] = useState('loading')
 
-  React.useEffect(() => {
-    getAllPosts().then((posts) => {
-      setPostsStatus(posts);
-      setComponentStatus('success');
-    }).catch(() => {
-      setComponentStatus('error');
-    })
-  }, [])
+  const [data, setData, isLoaded, isError] = useFetchData({
+    key: -1,
+    action: getAllPosts(),
+  });
 
   const addNewPost = (e, userId, title, body) => {
     e.preventDefault();
     const newPost = {
-      id: postsStatus.length + 1,
+      id: data.length + 1,
       userId,
       title,
       body,
     };
     createPost(newPost).then((data) => {
-      setPostsStatus(postsStatus.concat(newPost));
+      setData(data.concat(newPost));
     }).catch((error) => {
       console.error(error);
     });
   };
 
   const renderPosts = () => {
-    return <div>{!postsStatus || postsStatus.length === 0 ? (
+    return <div>{!data || data.length === 0 ? (
       <p>No posts</p>
     ) : (
       <ol>
-        {postsStatus.map((post) => (
+        {data.map((post) => (
           <Post key={post.id} id={post.id} userId={post.userId} title={post.title} body={post.body} />
         ))}
       </ol>
@@ -47,12 +43,19 @@ export const Posts = () => {
     }</div>
   }
 
+
+  if (!isLoaded) {
+    return <Loader />
+  }
+
+  if (isError) {
+    return <Error />;
+  }
+
   return (
     <div>
       <h1>Posts</h1>
-      {componentStatus === 'loading' && <p>Loading...</p>}
-      {componentStatus === 'error' && <p>ServerError</p>}
-      {componentStatus === 'success' && renderPosts()}
+      {renderPosts()}
       <br />
       <PostForm onNewPost={addNewPost} />
     </div>

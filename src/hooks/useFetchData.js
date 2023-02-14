@@ -5,7 +5,6 @@ export const useFetchData = ({ key, action }) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [isError, setError] = useState(false);
 
-  console.log('action', action)
   useEffect(() => {
     const loadData = async () => {
       try {
@@ -21,5 +20,5 @@ export const useFetchData = ({ key, action }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [key]);
 
-  return [data, isLoaded, isError];
+  return [data, setData, isLoaded, isError];
 }

@@ -3,11 +3,11 @@ import { getWithPause as getUser } from '../../services/users';
 import { Error } from '../Error';
 import { Loader } from '../Loader';
 
-export const User = () => {
+export const User = ({ id }) => {
 
   const [data, isLoaded, isError] = useFetchData({
-    key: 1,
-    action: getUser(1),
+    key: id,
+    action: getUser(id),
   });
 
   if (!isLoaded) {

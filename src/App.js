@@ -5,7 +5,7 @@ import { Posts } from './components/Posts/';
 function App() {
   return (
     <div className="App">
-      <User user={1} />
+      <User id={2} />
       <Posts />
     </div>
   );
